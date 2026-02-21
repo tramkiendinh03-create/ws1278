@@ -71,6 +71,7 @@ function glob_script_files() {
       results.push(file);
     });
 
+<<<<<<< HEAD
   // 允许父项目下的独立子入口（即使父目录已有 index.*）
   ['开局表格', '天罚选项'].forEach(childEntryDir => {
     fs.globSync(`src/**/${childEntryDir}/index.{ts,tsx,js,jsx}`).forEach(file => {
@@ -80,6 +81,8 @@ function glob_script_files() {
     });
   });
 
+=======
+>>>>>>> 3190fb176c50753bdb03667e72b85fbcffe909d1
   return results;
 }
 
@@ -196,10 +199,13 @@ function parse_configuration(entry: Entry): (_env: any, argv: any) => webpack.Co
     .readFileSync(path.join(import.meta.dirname, entry.script), 'utf-8')
     .includes('@obfuscate');
   const script_filepath = path.parse(entry.script);
+<<<<<<< HEAD
   const entry_dirs = config.entries.map(item => path.dirname(item.script));
   const has_child_entry = entry_dirs.some(
     dir => dir !== script_filepath.dir && dir.startsWith(`${script_filepath.dir}${path.sep}`),
   );
+=======
+>>>>>>> 3190fb176c50753bdb03667e72b85fbcffe909d1
 
   return (_env, argv) => ({
     experiments: {
@@ -231,9 +237,13 @@ function parse_configuration(entry: Entry): (_env: any, argv: any) => webpack.Co
       ),
       chunkFilename: `${script_filepath.name}.[contenthash].chunk.js`,
       asyncChunks: true,
+<<<<<<< HEAD
       // 父入口目录若包含子入口（如「src/天罚」与「src/天罚/开局表格」），
       // 不能 clean，否则会把子入口产物一并清掉。
       clean: !has_child_entry,
+=======
+      clean: true,
+>>>>>>> 3190fb176c50753bdb03667e72b85fbcffe909d1
       publicPath: '',
       library: {
         type: 'module',

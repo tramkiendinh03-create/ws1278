@@ -71,6 +71,7 @@ function glob_script_files() {
       results.push(file);
     });
 
+<<<<<<< HEAD
   // 允许父项目下的独立子入口（即使父目录已有 index.*）
   ['开局表格', '天罚选项'].forEach(childEntryDir => {
     fs.globSync(`src/**/${childEntryDir}/index.{ts,tsx,js,jsx}`).forEach(file => {
@@ -80,6 +81,8 @@ function glob_script_files() {
     });
   });
 
+=======
+>>>>>>> ff2bba6705f6e8d4882c9919916e7111f4f71dea
   return results;
 }
 
@@ -196,10 +199,13 @@ function parse_configuration(entry: Entry): (_env: any, argv: any) => webpack.Co
     .readFileSync(path.join(import.meta.dirname, entry.script), 'utf-8')
     .includes('@obfuscate');
   const script_filepath = path.parse(entry.script);
+<<<<<<< HEAD
   const entry_dirs = config.entries.map(item => path.dirname(item.script));
   const has_child_entry = entry_dirs.some(
     dir => dir !== script_filepath.dir && dir.startsWith(`${script_filepath.dir}${path.sep}`),
   );
+=======
+>>>>>>> ff2bba6705f6e8d4882c9919916e7111f4f71dea
 
   return (_env, argv) => ({
     experiments: {
@@ -231,9 +237,13 @@ function parse_configuration(entry: Entry): (_env: any, argv: any) => webpack.Co
       ),
       chunkFilename: `${script_filepath.name}.[contenthash].chunk.js`,
       asyncChunks: true,
+<<<<<<< HEAD
       // 父入口目录若包含子入口（如「src/天罚」与「src/天罚/开局表格」），
       // 不能 clean，否则会把子入口产物一并清掉。
       clean: !has_child_entry,
+=======
+      clean: true,
+>>>>>>> ff2bba6705f6e8d4882c9919916e7111f4f71dea
       publicPath: '',
       library: {
         type: 'module',
@@ -467,6 +477,10 @@ function parse_configuration(entry: Entry): (_env: any, argv: any) => webpack.Co
             { from: 'klona', imports: ['klona'] },
             { from: 'vue-final-modal', imports: ['useModal'] },
             { from: 'zod', imports: ['z'] },
+<<<<<<< HEAD
+=======
+            { from: 'type-fest', imports: [['*', 'TypeFest']], type: true },
+>>>>>>> ff2bba6705f6e8d4882c9919916e7111f4f71dea
           ],
         }),
         unpluginVueComponents({
@@ -575,9 +589,23 @@ function parse_configuration(entry: Entry): (_env: any, argv: any) => webpack.Co
       const cdn = {
         sass: 'https://jspm.dev/sass',
       };
+<<<<<<< HEAD
       return callback(
         null,
         'module-import ' + (cdn[request as keyof typeof cdn] ?? `https://testingcf.jsdelivr.net/npm/${request}/+esm`),
+=======
+      const package_json = JSON.parse(fs.readFileSync(path.join(import.meta.dirname, 'package.json'), 'utf-8')) as {
+        dependencies?: Record<string, string>;
+        devDependencies?: Record<string, string>;
+      };
+      const package_versions = { ...package_json.devDependencies, ...package_json.dependencies };
+      const version = package_versions[request]?.replace(/^[~^]/, '');
+      const versioned_request = /^[.\d]+$/.test(version) ? `${request}@${version}` : request;
+      return callback(
+        null,
+        'module-import ' +
+          (cdn[request as keyof typeof cdn] ?? `https://testingcf.jsdelivr.net/npm/${versioned_request}/+esm`),
+>>>>>>> ff2bba6705f6e8d4882c9919916e7111f4f71dea
       );
     },
   });
